@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>670</x>
+      <y>110</y>
+      <w>520</w>
+      <h>480</h>
+    </coordinates>
+    <panel_attributes>*Dystopic*
+--
++character_id: uint256
+#imageURI: string[]
+#attributes: IAttributes
++xp: (uint256 tokenId =&gt; uint256 xp)
++level: (uint256 tokenId =&gt; uint256 level)
++architype: (uint256 tokenId =&gt; uint256 architype)
++imageURI: (uint256 tokenId =&gt; string imageURI)
+--
+^createCharacter(architype: uint256): event createCharacter
+^getCharacter(tokenId: uint256): (xp, level, architype, imageURI)
+^(XP_GIVER) gainXp(tokenId: uint256, amountXp: uint256): event gainedXp
++getAttributes(tokenId: uint256): Attributes
+^levelUp(tokenId: uint256): event leveledUp
+#canLevelUp(tokenId: uint256): bool
++nextLevelXp(tokenId: uint256): uint256 level
++architypeToString(architype: uint256): string architype
+#tokenUriBase(tokenId: uint256): string baseUri
+#attributesToString(tokenId: uint256): Attributes
+#tokenUriAttributes(tokenId: uint256): string attributesURI
+#tokenURI(tokenId: uint256): string tokenURI
++supportsInterface()
+--
+*Events*
+characterCreated(address indexed owner, uint256 characterID, uint256 architype)
+leveledUp(address indexed owner, uint256 characterID, uint256 level)
+gainedXp(address owner, uint256 charcterID, uint256 xpGained)
+--
+*Roles*
+DEFAULT_ADMIN
+XP_GIVER</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>240</x>
+      <y>360</y>
+      <w>360</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>*Attributes*
+--
+#dyst: IDyst
++initAttributePoints: uint256
++idToAttributes (uint256 =&gt; CharAttributes)
++idToAttributePointsSpend (uint256 =&gt; uint256)
++initAttributesSet (uint256 =&gt; bool)
+--
+#isApprovedOrOwner(tokenId: uint256): bool
+^setInitAttributes(uint256 * 8):event initialisedAttributes
+#calcInitAttributes(uint256 * 7): bool
+#updateAttributes(tokenId: uint256): void
++calcAvailablePoints(tokenId: uint256): uint256 points
+^increaseStr(tokenId: uint256): (address, uint256 * 7)
+^increaseSpd(tokenId: uint256): (address, uint256 * 7)
+^increaseFort(tokenId: uint256): (address, uint256 * 7)
+^increaseTech(tokenId: uint256): (address, uint256 * 7)
+^increaseInstinct(tokenId: uint256): (address, uint256 * 7)
+^increaseDex(tokenId: uint256): (address, uint256 * 7)
+^increaseLuck(tokenId: uint256): (address, uint256 * 7)
+--
+*Events*
+initialisedAttributes(address indexed owner, uint256 * 8)
+attributesUpgraded(address indexed owner, uint256 * 8)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>100</y>
+      <w>240</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+IDystopic
+--
+^level(uint256): uint256
+^getApproved(uint256): address
+^ownerOf(uint256): address</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>530</x>
+      <y>140</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>50</x>
+      <y>50</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Weapons</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1100</x>
+      <y>870</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Moves</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>760</y>
+      <w>280</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*Stats*
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>190</x>
+      <y>40</y>
+      <w>1030</w>
+      <h>880</h>
+    </coordinates>
+    <panel_attributes>Character
+--
+bg=#89CFF0</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>240</y>
+      <w>280</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+IAttributes
+--
+^initAttributesSet(tokenId: uint256): bool
+^idToAttributes(tokenId: uint256): Attributes</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>210</x>
+      <y>150</y>
+      <w>110</w>
+      <h>670</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>60.0;650.0;10.0;650.0;10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>540</x>
+      <y>280</y>
+      <w>150</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>130.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>390</x>
+      <y>310</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>210</x>
+      <y>530</y>
+      <w>50</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
