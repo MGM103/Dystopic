@@ -52,8 +52,6 @@ library dl {
         uint256 defence;
         uint256 evasiveness;
         uint256 accuracy;
-        int128 stunResist;
-        int128 bleedResist;
-        int128 shockResist;
+        int128 elementResist;
     }
 }

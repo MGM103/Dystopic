@@ -11,7 +11,7 @@ pragma solidity ^0.8.9;
 import "../libraries/Structs.sol";
 
 contract WeaponManifest {
-    uint256 public immutable totalVariants = 3;
+    uint256 public constant totalVariants = 3;
 
     function wpnIdToWpnStats(uint256 _wpnID) public pure returns(dl.Weapon memory _weapon){
         if(_wpnID == 1){
