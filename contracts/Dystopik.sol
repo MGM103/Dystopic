@@ -198,10 +198,10 @@ contract Dystopik is ERC721Enumerable, AccessControl {
         return baseURI;
     }
 
-    function attributesToString(uint256 _tokenID) internal view returns(dl._StrCharAttributes memory) {
+    function attributesToString(uint256 _tokenID) internal view returns(dl.StrCharAttributes memory) {
         (uint256 strength, uint256 speed, uint256 fortitude, uint256 technical, uint256 instinct, uint256 dexterity, uint256 luck) = getAttributes(_tokenID);
 
-        dl._StrCharAttributes memory strAttributes = dl._StrCharAttributes(
+        dl.StrCharAttributes memory strAttributes = dl.StrCharAttributes(
             Strings.toString(strength),
             Strings.toString(speed),
             Strings.toString(fortitude),
@@ -218,7 +218,7 @@ contract Dystopik is ERC721Enumerable, AccessControl {
      * This function exists because of stack too deep. I needed to seperate the retrieval and stringifying of the attribute values.
      */
     function tokenURIAttributes(uint256 _tokenID) internal view returns(string memory) {
-        dl._StrCharAttributes memory _strAttributes = attributesToString(_tokenID);
+        dl.StrCharAttributes memory _strAttributes = attributesToString(_tokenID);
 
         string memory attributesURI = string(abi.encodePacked(' { "trait_type": "Strength", "value": "', _strAttributes.strength,
             '"}, { "trait_type": "Speed", "value": "', _strAttributes.speed,'"}, { "trait_type": "Fortitude", "value": "', _strAttributes.fortitude,'"}, { "trait_type": "Technical", "value": "',

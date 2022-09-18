@@ -8,7 +8,7 @@
 pragma solidity ^0.8.4;
 
 library dl {
-    struct _CharAttributes {
+    struct CharAttributes {
         uint256 strength;
         uint256 speed;
         uint256 fortitude;
@@ -18,7 +18,7 @@ library dl {
         uint256 luck;
     }
 
-    struct _StrCharAttributes {
+    struct StrCharAttributes {
         string strength;
         string speed;
         string fortitude;
@@ -28,7 +28,7 @@ library dl {
         string luck;
     }
 
-    struct _Weapon {
+    struct Weapon {
         uint256 variantID;
         uint256 cost;
         uint256 damageMax;
@@ -43,7 +43,7 @@ library dl {
         bool limitedSupply;
     }
 
-    struct _BattleStats {
+    struct BattleStats {
         uint256 damageMin;
         uint256 damageMax;
         uint256 critChance;

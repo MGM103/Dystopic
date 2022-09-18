@@ -1,5 +1,5 @@
 /** 
- *  @fileOverview This file is dedicated to the attributes of the characters
+ *  @fileOverview Contract used to mint in game weapons
  *  @author     Marcus Marinelli
  *  @version    0.1.0
 */
@@ -14,23 +14,19 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
-import "./libraries/Structs.sol";
+import "../libraries/Structs.sol";
+import "./WeaponManifest.sol";
 
-//Interfaces
-import "./interfaces/IWeaponManifest.sol";
-
-contract Weapons is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl {
+contract Weapons is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl, WeaponManifest {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
 
-    //Interfaces
-    IWeaponManifest manifest;
-
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-    mapping(uint256 => dl._Weapon) public idToStats;
+    mapping(address => uint256[]) public ownerToTokenId;
+    mapping(uint256 => uint256) public tokenIdToWpnId;
 
-    event weaponMinted(address indexed minter, uint256 tokenID, dl._Weapon newWeapon);
+    event weaponMinted(address indexed minter, uint256 tokenID, uint256 WpnId);
 
     constructor() ERC721("Dystopik Weapons", "WPNS") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -40,23 +36,23 @@ contract Weapons is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl {
 
     //No permission atm, will be added in future to work with openzeppelin defender
     function createWeapon(uint256 _wpnVariant) external {
-        require(_wpnVariant > 0 && _wpnVariant <= manifest.totalVariants(), "Invalid Weapon Variant");
+        require(_wpnVariant > 0 && _wpnVariant <= totalVariants, "Invalid Weapon Variant");
 
         uint256 tokenId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
-
-        dl._Weapon memory wpnType = manifest.idToWpn(_wpnVariant);
-        idToStats[tokenId] = wpnType;
+        tokenIdToWpnId[tokenId] = _wpnVariant;
+        ownerToTokenId[msg.sender].push(tokenId);
 
         _safeMint(msg.sender, tokenId);
-        
-        emit weaponMinted(msg.sender, tokenId, wpnType);
+        _tokenIdCounter.increment();
+
+        emit weaponMinted(msg.sender, tokenId, _wpnVariant);
     }
 
     function tokenURI(uint256 _tokenId) public view override returns(string memory){
-        dl._Weapon memory wpnData = idToStats[_tokenId];
+        uint256 wpnVariant = tokenIdToWpnId[_tokenId];
+        dl.Weapon memory wpnData = wpnIdToWpnStats(wpnVariant);
+        string memory wpnType = wpnTypeToStr(wpnData.damageType);
         string memory supplyStr = tokenURILimitedSupply(wpnData);
-        string memory wpnType = manifest.wpnTypeToStr(wpnData.damageType);
 
         string memory json = Base64.encode(
             abi.encodePacked(
@@ -78,7 +74,7 @@ contract Weapons is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl {
         return output;
     }
 
-    function tokenURILimitedSupply(dl._Weapon memory _wpn) internal pure returns(string memory){
+    function tokenURILimitedSupply(dl.Weapon memory _wpn) internal pure returns(string memory){
         if(_wpn.limitedSupply){
             string memory limitedSupplyStr = string(abi.encodePacked(
                 '{ "trait_type": "Limited Supply", "value": "true"}, {"trait_type": "Max Limit", "value":', _wpn.limit, '}'
@@ -92,12 +88,7 @@ contract Weapons is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl {
         }
     }
 
-    function setManifestInterface(address _interfaceAddr) external {
-        manifest = IWeaponManifest(_interfaceAddr);
-    }
-
     // The following functions are overrides required by Solidity.
-
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
         internal
         override(ERC721, ERC721Enumerable)

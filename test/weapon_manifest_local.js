@@ -19,7 +19,7 @@ describe("WeaponManifest", () => {
             [2, "Bludgeoning"],
             [3, "Piercing"],
             [4, "Shock"],
-            [5, "Explosive"]
+            [5, "Primitive"]
         ]);
 
         for(i = 1; i <= wpnTypeStrs.size; i++) {
@@ -28,8 +28,67 @@ describe("WeaponManifest", () => {
         }    
     });
 
+    it("Returns the correct weighting of attributes that affect weapon performance", async () => {
+        let txn, weaponTypes = 5;
+        let expectedAttributes = [
+            {
+                strength: 50,
+                dexterity: 50,
+                instinct: 0,
+                technical: 0,
+                speed: 0,
+                fortitude: 0,
+                luck: 0
+            },
+            {
+                strength: 100,
+                dexterity: 0,
+                instinct: 0,
+                technical: 0,
+                speed: 0,
+                fortitude: 0,
+                luck: 0
+            },
+            {
+                strength: 80,
+                dexterity: 10,
+                instinct: 10,
+                technical: 0,
+                speed: 0,
+                fortitude: 0,
+                luck: 0
+            },
+            {
+                strength: 0,
+                dexterity: 0,
+                instinct: 0,
+                technical: 100,
+                speed: 0,
+                fortitude: 0,
+                luck: 0
+            },
+            {
+                strength: 0,
+                dexterity: 0,
+                instinct: 100,
+                technical: 0,
+                speed: 0,
+                fortitude: 0,
+                luck: 0
+            }
+        ];
+        let attributeKeys = Object.keys(expectedAttributes[0]);
+
+        for(i = 1; i <= weaponTypes; i++){
+            txn = await this.manifest.wpnTypeAttributes(i);
+            for(j = 0; j < attributeKeys.length; j++){
+                expect(txn[attributeKeys[j]]).to.equal(expectedAttributes[i-1][attributeKeys[j]]);
+            } 
+        }
+    });
+
     it("Returns correct details for the Baton weapon variant", async () => {
-        let txn, txnWpnID, attributeKey;
+        let txnWpnID, attributeKey;
         const wpnID = 1;
         const batonInfo = new Map([
             ["variantID", 1],
@@ -47,18 +106,16 @@ describe("WeaponManifest", () => {
         ]);
 
         const attributeKeys = batonInfo.keys();
-        txn = await this.manifest.baton();
-        txnWpnID = await this.manifest.idToWpn(wpnID);
+        txnWpnID = await this.manifest.wpnIdToWpnStats(wpnID);
 
         for(i = 1; i < batonInfo.size; i++) {
             attributeKey = attributeKeys.next().value;
-            expect(txn[attributeKey]).to.equal(batonInfo.get(attributeKey));
             expect(txnWpnID[attributeKey]).to.equal(batonInfo.get(attributeKey));
         }  
     });
 
     it("Returns correct details for the Metal Rod weapon variant", async () => {
-        let txn, txnWpnID, attributeKey;
+        let txnWpnID, attributeKey;
         const wpnID = 2;
         const metalRodInfo = new Map([
             ["variantID", 2],
@@ -76,18 +133,16 @@ describe("WeaponManifest", () => {
         ]);
 
         const attributeKeys = metalRodInfo.keys();
-        txn = await this.manifest.metalRod();
-        txnWpnID = await this.manifest.idToWpn(wpnID);
+        txnWpnID = await this.manifest.wpnIdToWpnStats(wpnID);
 
         for(i = 1; i < metalRodInfo.size; i++) {
             attributeKey = attributeKeys.next().value;
-            expect(txn[attributeKey]).to.equal(metalRodInfo.get(attributeKey));
             expect(txnWpnID[attributeKey]).to.equal(metalRodInfo.get(attributeKey));
         }  
     });
 
     it("Returns correct details for the Shiv weapon variant", async () => {
-        let txn, txnWpnID, attributeKey;
+        let txnWpnID, attributeKey;
         const wpnID = 3;
         const shivInfo = new Map([
             ["variantID", 3],
@@ -105,12 +160,10 @@ describe("WeaponManifest", () => {
         ]);
 
         const attributeKeys = shivInfo.keys();
-        txn = await this.manifest.shiv();
-        txnWpnID = await this.manifest.idToWpn(wpnID);
+        txnWpnID = await this.manifest.wpnIdToWpnStats(wpnID);
 
         for(i = 1; i < shivInfo.size; i++) {
             attributeKey = attributeKeys.next().value;
-            expect(txn[attributeKey]).to.equal(shivInfo.get(attributeKey));
             expect(txnWpnID[attributeKey]).to.equal(shivInfo.get(attributeKey));
         }  
     });

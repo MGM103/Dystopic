@@ -1,5 +1,6 @@
 /** 
- *  @fileOverview This file is dedicated to the attributes of the characters
+ *  @fileOverview This file is the base layer for weapons, 
+ *  it maps the ids of weapons to their respective stats
  *  @author     Marcus Marinelli
  *  @version    0.1.0
 */
@@ -12,7 +13,7 @@ import "../libraries/Structs.sol";
 contract WeaponManifest {
     uint256 public immutable totalVariants = 3;
 
-    function idToWpn(uint256 _wpnID) external pure returns(dl._Weapon memory _weapon){
+    function wpnIdToWpnStats(uint256 _wpnID) public pure returns(dl.Weapon memory _weapon){
         if(_wpnID == 1){
             return baton();
         }else if(_wpnID == 2){
@@ -22,7 +23,7 @@ contract WeaponManifest {
         }
     }
 
-    function wpnTypeToStr(uint256 _typeID) external pure returns(string memory strTypeID){
+    function wpnTypeToStr(uint256 _typeID) public pure returns(string memory strTypeID){
         if(_typeID == 1){
             return "Slashing";
         }else if(_typeID == 2){
@@ -32,11 +33,28 @@ contract WeaponManifest {
         }else if(_typeID == 4){
             return "Shock";
         }else if(_typeID == 5){
-            return "Explosive";
+            return "Primitive";
         }
     }
 
-    function baton() public pure returns(dl._Weapon memory _weapon){
+    function wpnTypeAttributes(uint256 _typeID) public pure returns(dl.CharAttributes memory attributeMods){
+        if(_typeID == 1){
+            attributeMods.strength = 50;
+            attributeMods.dexterity = 50;
+        }else if(_typeID == 2){
+            attributeMods.strength = 100;
+        }else if(_typeID == 3){
+            attributeMods.strength = 80;
+            attributeMods.instinct = 10;
+            attributeMods.dexterity = 10;
+        }else if(_typeID == 4){
+            attributeMods.technical = 100;
+        }else if(_typeID == 5){
+            attributeMods.instinct = 100;
+        }
+    }
+
+    function baton() internal pure returns(dl.Weapon memory _weapon){
         _weapon.variantID = 1;
         _weapon.name = "Baton";
         _weapon.description = "Standard issue police officer protection baton";
@@ -51,7 +69,7 @@ contract WeaponManifest {
         _weapon.critChance = 1;
     }
 
-    function metalRod() public pure returns(dl._Weapon memory _weapon){
+    function metalRod() internal pure returns(dl.Weapon memory _weapon){
         _weapon.variantID = 2;
         _weapon.name = "Metal Rod";
         _weapon.description = "That constuction site doesn't need this";
@@ -66,7 +84,7 @@ contract WeaponManifest {
         _weapon.critChance = 1;
     }
 
-    function shiv() public pure returns(dl._Weapon memory _weapon){
+    function shiv() internal pure returns(dl.Weapon memory _weapon){
         _weapon.variantID = 3;
         _weapon.name = "Shiv";
         _weapon.description = "Stick them with the pointy end";
