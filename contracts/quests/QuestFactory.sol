@@ -9,16 +9,16 @@ pragma solidity ^0.8.9;
 
 import "./EnemyManifest.sol";
 import "../libraries/Structs.sol";
-import "../interfaces/IDystopik.sol";
+import "../characters/IDystopic.sol";
 import "../items/IWeapons.sol";
 
 abstract contract QuestFactory is EnemyManifest {
-    IDystopik immutable IDyst;
+    IDystopic immutable IDyst;
     IWeapons immutable IWpn;
     uint256 immutable questXp;
 
     constructor(address _IDyst, address _IWpn, uint256 _questXp){
-        IDyst = IDystopik(_IDyst);
+        IDyst = IDystopic(_IDyst);
         IWpn = IWeapons(_IWpn);
         questXp = _questXp;
     }

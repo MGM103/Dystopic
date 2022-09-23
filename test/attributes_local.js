@@ -3,34 +3,34 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("Attributes", () => {
-  let dystopikContract;
+  let dystopicContract;
   let attributesContract;
   let owner, addr1;
   const id = 1;
   const strength = 5, speed = 5, fortitude = 5, technical = 2, instinct = 2, dexterity = 3, luck = 3;
 
   beforeEach(async () => {
-    //Constructor arguement for dystopik
+    //Constructor arguement for dystopic
     const imageURIs = [
       "https://i.pinimg.com/564x/f7/cc/b5/f7ccb5a281a6c12773eb486b369d7f89.jpg",
       "https://i.pinimg.com/564x/55/b9/04/55b9046000c50ce93fb17da7c2abe6a7.jpg",
       "https://i.pinimg.com/564x/dd/6f/47/dd6f4703cd14c56af1fab2cbb6e5eb7c.jpg"
     ]
 
-    const dystopikFactory = await ethers.getContractFactory("Dystopik");
-    dystopikContract = await dystopikFactory.deploy(imageURIs);
-    await dystopikContract.deployed();
+    const dystopicFactory = await ethers.getContractFactory("Dystopic");
+    dystopicContract = await dystopicFactory.deploy(imageURIs);
+    await dystopicContract.deployed();
 
     //mint a character
     const architype = 1;
-    let mintTx = await dystopikContract.createCharacter(architype);
+    let mintTx = await dystopicContract.createCharacter(architype);
     await mintTx.wait();
 
     //constructor argument for attribute contract
-    const dystopikAddr = dystopikContract.address;
+    const dystopicAddr = dystopicContract.address;
 
     const attributeFactory = await ethers.getContractFactory("Attributes");
-    attributesContract = await attributeFactory.deploy(dystopikAddr);
+    attributesContract = await attributeFactory.deploy(dystopicAddr);
     await attributesContract.deployed();
 
     [owner, addr1] = await ethers.getSigners();
@@ -110,10 +110,10 @@ describe("Attributes", () => {
     beforeEach(async () => {
       const givenXp = 100;
 
-      let txn = await dystopikContract.gainXp(id, givenXp);
+      let txn = await dystopicContract.gainXp(id, givenXp);
       await txn.wait();
 
-      let lvlUpTxn = await dystopikContract.levelUp(id);
+      let lvlUpTxn = await dystopicContract.levelUp(id);
       await lvlUpTxn.wait();
 
       let setTxn = await attributesContract.setInitAttributes(id, strength, speed, fortitude, technical, instinct, dexterity, luck);

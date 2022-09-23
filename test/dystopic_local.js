@@ -1,8 +1,8 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("Dystopik", () => {
-  let dystopikContract;
+describe("Dystopic", () => {
+  let dystopicContract;
   let owner, addr1;
 
   beforeEach(async () => {
@@ -11,9 +11,9 @@ describe("Dystopik", () => {
       "https://i.pinimg.com/564x/55/b9/04/55b9046000c50ce93fb17da7c2abe6a7.jpg",
       "https://i.pinimg.com/564x/dd/6f/47/dd6f4703cd14c56af1fab2cbb6e5eb7c.jpg"
     ]
-    const dystopikFactory = await ethers.getContractFactory("Dystopik");
-    dystopikContract = await dystopikFactory.deploy(imageURIs);
-    await dystopikContract.deployed();
+    const dystopicFactory = await ethers.getContractFactory("Dystopic");
+    dystopicContract = await dystopicFactory.deploy(imageURIs);
+    await dystopicContract.deployed();
 
     [owner, addr1] = await ethers.getSigners();
   })
@@ -29,12 +29,12 @@ describe("Dystopik", () => {
     ] 
     
     for(i = 0; i < characterTypes.length; i++){
-      mintTxn = await dystopikContract.createCharacter(characterTypes[i]);
+      mintTxn = await dystopicContract.createCharacter(characterTypes[i]);
       await mintTxn.wait();
 
-      expect(mintTxn).to.emit(dystopikContract, "characterCreated");
+      expect(mintTxn).to.emit(dystopicContract, "characterCreated");
 
-      mintTxn = await dystopikContract.getCharacter(i+1);
+      mintTxn = await dystopicContract.getCharacter(i+1);
 
       expect(mintTxn[0].toNumber()).to.equal(xp);
       expect(mintTxn[1]).to.equal(level);
@@ -48,7 +48,7 @@ describe("Dystopik", () => {
 
     for(i = 0; i < characterTypes.length; i++){
       await expect(
-        dystopikContract.createCharacter(characterTypes[i])
+        dystopicContract.createCharacter(characterTypes[i])
       ).to.be.revertedWith(
         "Architype does not exist"
       );
@@ -61,7 +61,7 @@ describe("Dystopik", () => {
     let archTx;
     
     for(i = 0; i < architypes.length; i++){
-      archTx = await dystopikContract.architypeToString(architypes[i]);
+      archTx = await dystopicContract.architypeToString(architypes[i]);
       expect(archTx).to.equal(expectedStrings[i]);
     }
   });
@@ -70,11 +70,11 @@ describe("Dystopik", () => {
     const characterType = 1;
     const tokenID = 1;
 
-    let txn = await dystopikContract.createCharacter(characterType);
+    let txn = await dystopicContract.createCharacter(characterType);
     await txn.wait();
 
     await expect(
-      dystopikContract.connect(addr1).levelUp(tokenID)
+      dystopicContract.connect(addr1).levelUp(tokenID)
     ).to.be.revertedWith("You do not have approval to perform this action");
   });
 
@@ -82,11 +82,11 @@ describe("Dystopik", () => {
     const characterType = 1;
     const tokenID = 1;
 
-    let txn = await dystopikContract.createCharacter(characterType);
+    let txn = await dystopicContract.createCharacter(characterType);
     await txn.wait();
 
     await expect(
-      dystopikContract.levelUp(tokenID)
+      dystopicContract.levelUp(tokenID)
     ).to.be.revertedWith("Insufficent xp");
   });
 
@@ -95,25 +95,25 @@ describe("Dystopik", () => {
     const role_bytes = ethers.utils.toUtf8Bytes("XP_GIVER")
     const XP_GIVER = ethers.utils.keccak256(role_bytes);
 
-    let txn = await dystopikContract.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
+    let txn = await dystopicContract.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
     expect(txn).to.equal(true);
 
-    txn = await dystopikContract.hasRole(XP_GIVER, owner.address);
+    txn = await dystopicContract.hasRole(XP_GIVER, owner.address);
     expect(txn).to.equal(true);
 
-    txn = await dystopikContract.hasRole(DEFAULT_ADMIN_ROLE, addr1.address);
+    txn = await dystopicContract.hasRole(DEFAULT_ADMIN_ROLE, addr1.address);
     expect(txn).to.equal(false);
 
-    txn = await dystopikContract.hasRole(XP_GIVER, addr1.address);
+    txn = await dystopicContract.hasRole(XP_GIVER, addr1.address);
     expect(txn).to.equal(false);
   });
 
-  describe("Dystopik Xp", async () => {
+  describe("Dystopic Xp", async () => {
     const charType = 1;
     const charID = 1;
 
     beforeEach(async () => {
-      mintTxn = await dystopikContract.createCharacter(charType);
+      mintTxn = await dystopicContract.createCharacter(charType);
       await mintTxn.wait();
     })
 
@@ -123,7 +123,7 @@ describe("Dystopik", () => {
       let lvlRes;
       
       for(let i = 0; i < levels.length; i++) {
-        lvlRes = await dystopikContract.nextLevelXp(levels[i]);
+        lvlRes = await dystopicContract.nextLevelXp(levels[i]);
         expect(lvlRes).to.equal(expectedVals[i]);
       }
     });
@@ -135,19 +135,19 @@ describe("Dystopik", () => {
       const errMsg = `AccessControl: account ${(addr1.address).toLowerCase()} is missing role ${XP_GIVER}`;
   
       await expect(
-        dystopikContract.connect(addr1).gainXp(charID, xpGiven)
+        dystopicContract.connect(addr1).gainXp(charID, xpGiven)
       ).to.be.revertedWith(errMsg);
     });
   
     it("Updates Xp correctly", async () => {
       const xpGiven = 100;
   
-      let xpTxn = await dystopikContract.gainXp(charID, xpGiven);
+      let xpTxn = await dystopicContract.gainXp(charID, xpGiven);
       await xpTxn.wait();
   
-      expect(xpTxn).to.emit(dystopikContract, "gainedXp");
+      expect(xpTxn).to.emit(dystopicContract, "gainedXp");
   
-      let xp = await dystopikContract.xp(charID);
+      let xp = await dystopicContract.xp(charID);
       
       expect(xp).to.equal(xpGiven);
     });
@@ -156,20 +156,20 @@ describe("Dystopik", () => {
       const xpGiven = 100;
       const expectedLvl = 2;
   
-      let xpTxn = await dystopikContract.gainXp(charID, xpGiven);
+      let xpTxn = await dystopicContract.gainXp(charID, xpGiven);
       await xpTxn.wait();
 
-      const beforeXp = await dystopikContract.xp(charID);
-      const beforeLvl = await dystopikContract.level(charID);
-      const xp2LevelUp = await dystopikContract.nextLevelXp(beforeLvl);
+      const beforeXp = await dystopicContract.xp(charID);
+      const beforeLvl = await dystopicContract.level(charID);
+      const xp2LevelUp = await dystopicContract.nextLevelXp(beforeLvl);
 
-      let lvlUpTxn = await dystopikContract.levelUp(charID);
+      let lvlUpTxn = await dystopicContract.levelUp(charID);
       await lvlUpTxn.wait();
 
-      expect(lvlUpTxn).to.emit(dystopikContract, "leveledUp");
+      expect(lvlUpTxn).to.emit(dystopicContract, "leveledUp");
 
-      const currentXp = await dystopikContract.xp(charID);
-      const currentLvl = await dystopikContract.level(charID);
+      const currentXp = await dystopicContract.xp(charID);
+      const currentLvl = await dystopicContract.level(charID);
 
       expect(currentLvl).to.equal(expectedLvl);
       expect(currentXp).to.equal(beforeXp - xp2LevelUp);
@@ -184,18 +184,18 @@ describe("Dystopik", () => {
 
     beforeEach(async () => {
       const attributesFactory = await ethers.getContractFactory("Attributes");
-      attributesContract = await attributesFactory.deploy(dystopikContract.address);
+      attributesContract = await attributesFactory.deploy(dystopicContract.address);
 
-      await dystopikContract.setAttributesInterface(attributesContract.address);
+      await dystopicContract.setAttributesInterface(attributesContract.address);
 
-      mintTxn = await dystopikContract.createCharacter(charType);
+      mintTxn = await dystopicContract.createCharacter(charType);
       await mintTxn.wait();
     });
 
     it("Gets the attributes of a player's character", async () => {
       let txn = await attributesContract.setInitAttributes(tokenID, strength, speed, fortitude, technical, instinct, dexterity, luck);
       
-      txn = await dystopikContract.getAttributes(tokenID);
+      txn = await dystopicContract.getAttributes(tokenID);
       expect(txn[0]).to.equal(strength);
       expect(txn[1]).to.equal(speed);
       expect(txn[2]).to.equal(fortitude);
@@ -209,7 +209,7 @@ describe("Dystopik", () => {
       let txn = await attributesContract.setInitAttributes(tokenID, strength, speed, fortitude, technical, instinct, dexterity, luck);
       await txn.wait();
 
-      txn = await dystopikContract.tokenURI(tokenID);
+      txn = await dystopicContract.tokenURI(tokenID);
       console.log(txn);
     });
   });

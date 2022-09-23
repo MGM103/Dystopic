@@ -18,7 +18,7 @@ describe("Prologue", async () => {
             "https://i.pinimg.com/564x/dd/6f/47/dd6f4703cd14c56af1fab2cbb6e5eb7c.jpg"
         ]
 
-        this.dystopicContract = await deploy("Dystopik", imageURIs);
+        this.dystopicContract = await deploy("Dystopic", imageURIs);
         this.wpnContract = await deploy("Weapons");
         this.prologueContract = await deploy(
             "Prologue", 

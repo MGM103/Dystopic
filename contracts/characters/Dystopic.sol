@@ -13,12 +13,12 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
-import "./libraries/Structs.sol";
+import "../libraries/Structs.sol";
 
 //Interfaces
-import "./interfaces/IAttributes.sol";
+import "./IAttributes.sol";
 
-contract Dystopik is ERC721Enumerable, AccessControl {
+contract Dystopic is ERC721Enumerable, AccessControl {
     //Interfaces
     IAttributes Attributes;
     
