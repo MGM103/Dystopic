@@ -31,13 +31,13 @@ abstract contract QuestFactory is EnemyManifest {
         IDyst.gainXp(_tokenId, questXp);
     }
 
-    function awardLoot(uint256 _wpnId) internal {
-        IWpn.createWeapon(_wpnId);
+    function awardLoot(uint256 _wpnId, address _to) internal {
+        IWpn.createWeapon(_wpnId, _to);
     }
 
     function beginQuest(uint256 _tokenId) external virtual;
     function abortQuest(uint256 _tokenId) external virtual;
-    function completeQuest(uint256 _tokenId) external virtual;
-    function transferLoot() internal virtual;
+    function completeQuest(address player, uint256 _tokenId) external virtual;
+    function transferLoot(address player) internal virtual;
     function transferReward() internal virtual;
 }

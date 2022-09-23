@@ -38,10 +38,10 @@ contract Prologue is QuestFactory, Credits {
     }
 
     //add access modifier
-    function completeQuest(uint256 tokenId) external override {
-        awardXp(questXp);
-        transferLoot();
+    function completeQuest(address player, uint256 tokenId) external override {
+        awardXp(tokenId);
         transferReward();
+        transferLoot(player);
         
         emit CompletedQuest(msg.sender, tokenId, questXp, reward, loot[0]);
     }
@@ -50,9 +50,9 @@ contract Prologue is QuestFactory, Credits {
         emit AbortedQuest(msg.sender, tokenId);
     }
 
-    function transferLoot() internal override {
+    function transferLoot(address player) internal override {
         //implement VRF
-        awardLoot(loot[0]);
+        awardLoot(loot[0], player);
     }
 
     function transferReward() internal override {

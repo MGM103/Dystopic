@@ -23,10 +23,10 @@ contract Weapons is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl, Wea
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-    mapping(address => uint256[]) public ownerToTokenId;
+    mapping(address => uint256[]) public ownerToTokenIds;
     mapping(uint256 => uint256) public tokenIdToWpnId;
 
-    event weaponMinted(address indexed minter, uint256 tokenID, uint256 WpnId);
+    event WeaponMinted(address indexed minter, uint256 tokenID, uint256 WpnId);
 
     constructor() ERC721("Dystopik Weapons", "WPNS") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -40,12 +40,25 @@ contract Weapons is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl, Wea
 
         uint256 tokenId = _tokenIdCounter.current();
         tokenIdToWpnId[tokenId] = _wpnVariant;
-        ownerToTokenId[msg.sender].push(tokenId);
+        ownerToTokenIds[msg.sender].push(tokenId);
 
         _safeMint(msg.sender, tokenId);
         _tokenIdCounter.increment();
 
-        emit weaponMinted(msg.sender, tokenId, _wpnVariant);
+        emit WeaponMinted(msg.sender, tokenId, _wpnVariant);
+    }
+
+    function createWeapon(uint256 _wpnVariant, address _to) external {
+        require(_wpnVariant > 0 && _wpnVariant <= totalVariants, "Invalid Weapon Variant");
+
+        uint256 tokenId = _tokenIdCounter.current();
+        tokenIdToWpnId[tokenId] = _wpnVariant;
+        ownerToTokenIds[_to].push(tokenId);
+
+        _safeMint(_to, tokenId);
+        _tokenIdCounter.increment();
+
+        emit WeaponMinted(_to, tokenId, _wpnVariant);
     }
 
     function tokenURI(uint256 _tokenId) public view override returns(string memory){
