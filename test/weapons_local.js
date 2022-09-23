@@ -36,7 +36,7 @@ describe("Weapons", () => {
             wpnTxn = await this.wpnContract.createWeapon(wpnVariant);
             expect(wpnTxn).to.emit(this.wpnContract, "weaponMinted");
 
-            wpnTxn = await this.wpnContract.ownerToTokenId(owner.address, i);
+            wpnTxn = await this.wpnContract.ownerToTokenIds(owner.address, i);
             expect(wpnTxn).to.equal(expectedOwnedTokens[i]);
         }
     });

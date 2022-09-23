@@ -64,7 +64,7 @@ describe("Prologue", async () => {
             this.prologueContract.completeQuest(owner, tokenId)
         ).to.emit(this.prologueContract, "CompletedQuest");
         
-        txn = await this.wpnContract.ownerToWpnIds(owner, 0);
+        txn = await this.wpnContract.ownerToTokenIds(owner, 0);
         expect(txn).to.equal(expectedWpnId);
     });
 })

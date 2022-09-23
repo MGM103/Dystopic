@@ -48,7 +48,7 @@ contract Weapons is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl, Wea
         emit WeaponMinted(msg.sender, tokenId, _wpnVariant);
     }
 
-    function createWeapon(uint256 _wpnVariant, address _to) external {
+    function createWeaponTo(uint256 _wpnVariant, address _to) external {
         require(_wpnVariant > 0 && _wpnVariant <= totalVariants, "Invalid Weapon Variant");
 
         uint256 tokenId = _tokenIdCounter.current();

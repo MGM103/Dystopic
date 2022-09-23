@@ -16,5 +16,5 @@ interface IWeapons {
     function wpnTypeToStr(uint256) external pure returns(string memory);
     function wpnTypeAttributes(uint256) external pure returns(dl.CharAttributes memory);
     function createWeapon(uint256) external;
-    function createWeapon(uint256 _wpnVariant, address _to) external;
+    function createWeaponTo(uint256 _wpnVariant, address _to) external;
 }

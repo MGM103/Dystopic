@@ -32,7 +32,7 @@ abstract contract QuestFactory is EnemyManifest {
     }
 
     function awardLoot(uint256 _wpnId, address _to) internal {
-        IWpn.createWeapon(_wpnId, _to);
+        IWpn.createWeaponTo(_wpnId, _to);
     }
 
     function beginQuest(uint256 _tokenId) external virtual;
