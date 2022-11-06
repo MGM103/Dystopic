@@ -53,4 +53,11 @@ library dl {
         uint256 evasiveness;
         uint256 elementResist;
     }
+
+    enum Architypes {
+        ANY,
+        CHIMERA,
+        ANDROID,
+        AI
+    }
 }
