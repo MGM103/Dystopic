@@ -26,8 +26,9 @@ contract Dystopic is ERC721Enumerable, AccessControl {
     using Counters for Counters.Counter;
     Counters.Counter public _characterID;
 
-    //Contains the avatar images for the different characters that can be created
+    //Character variables
     string[] imageURIs;
+    uint256 public constant totalArchitypes = 3;
 
     //Defining role(s)
     bytes32 public constant XP_GIVER = keccak256("XP_GIVER");
@@ -66,7 +67,7 @@ contract Dystopic is ERC721Enumerable, AccessControl {
      *  @param _architype {uint256} - The type of the avatar.
      */
     function createCharacter(uint256 _architype) external {
-        require(_architype >= 1 && _architype < 4, "Architype does not exist");
+        require(_architype >= 1 && _architype <= totalArchitypes, "Architype does not exist");
         
         uint256 nextID = _characterID.current();
         architype[nextID] = _architype;

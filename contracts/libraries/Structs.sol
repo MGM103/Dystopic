@@ -44,14 +44,13 @@ library dl {
     }
 
     struct BattleStats {
-        uint256 damageMin;
-        uint256 damageMax;
-        uint256 critChance;
-        uint256 speed;
+        uint256 meleeDmg;
+        uint256 rangedDmg;
         uint256 health;
+        uint256 speed;
         uint256 defence;
+        uint256 crit;
         uint256 evasiveness;
-        uint256 accuracy;
-        int128 elementResist;
+        uint256 elementResist;
     }
 }

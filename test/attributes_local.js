@@ -1,4 +1,3 @@
-const { EtherscanProvider } = require("@ethersproject/providers");
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 

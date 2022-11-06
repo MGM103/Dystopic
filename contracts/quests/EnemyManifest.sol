@@ -23,26 +23,24 @@ contract EnemyManifest {
     }
 
     function thief() internal pure returns(dl.BattleStats memory enemyStats){
-        enemyStats.damageMin = 1;
-        enemyStats.damageMax = 3;
-        enemyStats.critChance = 2;
+        enemyStats.meleeDmg = 1;
+        enemyStats.rangedDmg = 3;
+        enemyStats.crit = 2;
         enemyStats.speed = 10;
         enemyStats.health = 20;
         enemyStats.defence = 0;
         enemyStats.evasiveness = 1;
-        enemyStats.accuracy = 95;
         enemyStats.elementResist = 0;
     }
 
     function outlaw() internal pure returns(dl.BattleStats memory enemyStats){
-        enemyStats.damageMin = 2;
-        enemyStats.damageMax = 4;
-        enemyStats.critChance = 2;
+        enemyStats.meleeDmg = 2;
+        enemyStats.rangedDmg = 4;
+        enemyStats.crit = 2;
         enemyStats.speed = 15;
         enemyStats.health = 12;
         enemyStats.defence = 5;
         enemyStats.evasiveness = 3;
-        enemyStats.accuracy = 96;
         enemyStats.elementResist = 0;
     }
 }
