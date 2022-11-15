@@ -224,30 +224,20 @@ AddAbility(address indexed, uint256, uint256)
     <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
   </element>
   <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1188</x>
-      <y>324</y>
-      <w>36</w>
-      <h>108</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLClass</id>
     <coordinates>
       <x>1020</x>
-      <y>660</y>
+      <y>648</y>
       <w>360</w>
-      <h>84</h>
+      <h>96</h>
     </coordinates>
     <panel_attributes>*AbilityManifest*
 --
 +totalAbilities: uint256
 --
-+abilityToModifiers(uint256): AbilityStats
-+abilityRequirements(level: uint256, architype: uint256): uint256[]</panel_attributes>
++abilityToModifiers(uint256): (AbilityStats, duration)
++abilityRequirements(level: uint256, architype: uint256): 
+    (level, architype, attributeReqs)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -256,10 +246,10 @@ AddAbility(address indexed, uint256, uint256)
       <x>1188</x>
       <y>588</y>
       <w>36</w>
-      <h>96</h>
+      <h>84</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -293,28 +283,6 @@ AddAbility(address indexed, uint256, uint256)
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>720</x>
-      <y>132</y>
-      <w>336</w>
-      <h>360</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>260.0;10.0;210.0;10.0;210.0;270.0;10.0;270.0;10.0;280.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>948</x>
-      <y>276</y>
-      <w>132</w>
-      <h>288</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>90.0;10.0;40.0;10.0;40.0;220.0;10.0;220.0</additional_attributes>
   </element>
   <element>
     <id>UMLPackage</id>
