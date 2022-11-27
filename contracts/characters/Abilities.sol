@@ -107,16 +107,21 @@ contract Abilities is AbilitiesManifest {
 
         uint256 i;
         bool abilitySlotFree = false;
+        bool abilityExists = false;
         uint256[MAX_ABILITIES] memory abilities = idToAbilities[tokenId];
 
         for(i = 0; i < MAX_ABILITIES; i++){
-            if(abilities[i] == 0){
+            if(abilities[i] == abilityToAdd){
+                abilityExists = true;
+                break;
+            }else if(abilities[i] == 0){
                 abilitySlotFree = true;
                 abilities[i] = abilityToAdd;
             }
         }
 
         require(abilitySlotFree == true, "All ability slots have been assigned");
+        require(abilityExists == false, "Ability already owned");
 
         idToAbilities[tokenId] = abilities;
         emit abilityAdded(msg.sender, tokenId, abilities, abilityToAdd);

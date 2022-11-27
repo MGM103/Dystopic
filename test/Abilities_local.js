@@ -19,7 +19,7 @@ describe("Abilities", () => {
         expect(numAbilities).to.equal(expectedNumAbilities);
     });
 
-    describe("Set initial ability", async () => {
+    describe("Set Initial Ability", async () => {
         const tokenId = 1, level = 1, architype = 2, numAbilities = 4, abilityId = 4;
         const attributes = {
             strength: 5, 
@@ -95,7 +95,7 @@ describe("Abilities", () => {
         });
     });
 
-    describe("Change existing ability", async () => {
+    describe("Change Existing Ability", async () => {
         const tokenId = 1, level = 1, architype = 2, abilityAdd = 4, abilityRemove = 1;
         const numAbilities = 4;
         const attributes = {
@@ -187,6 +187,93 @@ describe("Abilities", () => {
                 expect(txn).to.emit("abilityChanged");
 
                 let newAbility = await this.abilitiesContract.idToAbilities(tokenId, 0);
+                expect(newAbility).to.equal(abilityAdd);
+            });
+        });
+    });
+
+    describe("Add Ability", async () => {
+        const tokenId = 1, level = 1, architype = 2, abilityAdd = 4, existingAbility = 1;
+        const numAbilities = 4;
+        const attributes = {
+            strength: 5, 
+            speed: 5,
+            fortitude: 5,
+            technical: 2,
+            instinct: 2,
+            dexterity: 3,
+            luck: 3
+        };
+
+        it("Ensures ability has been set", async () => {
+            await expect(
+                this.abilitiesContract.addAbility(tokenId, abilityAdd, level, architype, attributes)
+            ).to.be.revertedWith("Abilities must be initialised before they can be changed");
+        });
+
+        context("Initial ability has been set", async () => {
+            beforeEach(async () => {
+                let txn = await this.abilitiesContract.setInitAbilities(tokenId, existingAbility, level, architype, attributes);
+                await txn.wait();
+            });
+
+            it("Ensures ability being added is valid", async () => {
+                const invalidAbilities = [0, numAbilities+1];
+
+                for(i = 0; i < invalidAbilities.length; i++){
+                    await expect(
+                        this.abilitiesContract.addAbility(tokenId, invalidAbilities[i], level, architype, attributes)
+                    ).to.be.revertedWith("Ability being added not found");
+                } 
+            });
+
+            it("Ensures level requirement is met", async () => {
+                const invalidLvl = 0;
+
+                await expect(
+                    this.abilitiesContract.addAbility(tokenId, abilityAdd, invalidLvl, architype, attributes)
+                ).to.be.revertedWith("Ability level requirement not met");
+            });
+
+            it("Ensures architype requirement is met", async () => {
+                const invalidArchitype = 1;
+        
+                await expect(
+                    this.abilitiesContract.addAbility(tokenId, abilityAdd, level, invalidArchitype, attributes)
+                ).to.be.revertedWith("Ability architype requirement not met");
+            });
+
+            it("Ensures attribute requirements are met", async () => {
+                const invalidAttributes = {
+                    strength: 5, 
+                    speed: 5,
+                    fortitude: 5,
+                    technical: 0,
+                    instinct: 2,
+                    dexterity: 4,
+                    luck: 4
+                };
+        
+                await expect(
+                    this.abilitiesContract.addAbility(tokenId, abilityAdd, level, architype, invalidAttributes)
+                ).to.be.revertedWith("Ability attribute requirements not met");
+            });
+
+            //This test does not scale well
+            it("Ensures the ability slot is free", async () => {
+                let extraAbility = 2;
+                await this.abilitiesContract.addAbility(tokenId, abilityAdd, level, architype, attributes);
+
+                await expect(
+                    this.abilitiesContract.addAbility(tokenId, extraAbility, level, architype, attributes)
+                ).to.be.revertedWith("All ability slots have been assigned");
+            });
+
+            it("Changes attribute correctly", async () => {
+                let txn = await this.abilitiesContract.addAbility(tokenId, abilityAdd, level, architype, attributes);
+                expect(txn).to.emit("abilityAdded");
+
+                let newAbility = await this.abilitiesContract.idToAbilities(tokenId, 1);
                 expect(newAbility).to.equal(abilityAdd);
             });
         });
