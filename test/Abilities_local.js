@@ -50,5 +50,32 @@ describe("Abilities", () => {
         await expect(
             this.abilitiesContract.setInitAbilities(tokenId, abilityId, level, invalidArchitype, attributes)
         ).to.be.revertedWith("Ability architype requirement not met");
+
+        const invalidAttributes = {
+            strength: 5, 
+            speed: 5,
+            fortitude: 5,
+            technical: 0,
+            instinct: 2,
+            dexterity: 4,
+            luck: 4
+        };
+
+        await expect(
+            this.abilitiesContract.setInitAbilities(tokenId, abilityId, level, architype, invalidAttributes)
+        ).to.be.revertedWith("Ability attribute requirements not met");
+
+        let txn = await this.abilitiesContract.setInitAbilities(tokenId, abilityId, level, architype, attributes);
+        expect(txn).to.emit(this.abilitiesContract, "initialisedAbilities");
+        
+        let idToAbilities = await this.abilitiesContract.idToAbilities(tokenId, 0);
+        expect(idToAbilities).to.equal(abilityId);
+        
+        let initAbilitiesSet = await this.abilitiesContract.initAbilitiesSet(tokenId);
+        expect(initAbilitiesSet).to.equal(true);
+
+        await expect(
+            this.abilitiesContract.setInitAbilities(tokenId, abilityId, level, architype, attributes)
+        ).to.be.revertedWith("Initial ability has already been set");
     });
 });
