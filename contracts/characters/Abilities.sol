@@ -49,10 +49,10 @@ contract Abilities is AbilitiesManifest {
     }
 
     function changeAbility(uint256 tokenId, uint256 abilityToChange, uint256 abilityToAdd, uint256 level, uint256 architype, dl.CharAttributes memory attributes) external {
+        require(initAbilitiesSet[tokenId] == true, "Abilities must be initialised before they can be changed");
         require(abilityToChange >= 1 && abilityToChange <= totalAbilities, "Ability being changed not found");
         require(abilityToAdd >= 1 && abilityToAdd <= totalAbilities, "Ability being added not found");
-        require(abilityToAdd != abilityToChange, "Abilities are the same");
-        require(initAbilitiesSet[tokenId] == true, "Abilities must be initialised before they can be changed");
+        require(abilityToAdd != abilityToChange, "Abilities are the same");  
 
         (uint256 lvlReq, dl.Architypes architypeReq, dl.CharAttributes memory attrReq) = abilityToRequirements(abilityToAdd);
 
@@ -87,8 +87,8 @@ contract Abilities is AbilitiesManifest {
     }
 
     function addAbility(uint256 tokenId, uint256 abilityToAdd, uint256 level, uint256 architype, dl.CharAttributes memory attributes) external {
-        require(abilityToAdd >= 1 && abilityToAdd <= totalAbilities, "Ability being added not found");
         require(initAbilitiesSet[tokenId] == true, "Abilities must be initialised before they can be changed");
+        require(abilityToAdd >= 1 && abilityToAdd <= totalAbilities, "Ability being added not found");
 
         (uint256 lvlReq, dl.Architypes architypeReq, dl.CharAttributes memory attrReq) = abilityToRequirements(abilityToAdd);
 
