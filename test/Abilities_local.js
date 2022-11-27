@@ -115,8 +115,13 @@ describe("Abilities", () => {
         });
 
         context("Initial ability has been set", async () => {
+            const extraAbility = 2;
+
             beforeEach(async () => {
                 let txn = await this.abilitiesContract.setInitAbilities(tokenId, abilityRemove, level, architype, attributes);
+                await txn.wait();
+
+                txn = await this.abilitiesContract.addAbility(tokenId, extraAbility, level, architype, attributes);
                 await txn.wait();
             });
 
@@ -174,8 +179,14 @@ describe("Abilities", () => {
                 ).to.be.revertedWith("Ability attribute requirements not met");
             });
 
+            it("Ensures attribute is not already owned", async () => {
+                await expect(
+                    this.abilitiesContract.changeAbility(tokenId, extraAbility, abilityRemove, level, architype, attributes)
+                ).to.be.revertedWith("Ability already owned");
+            });
+
             it("Ensures the ability being removed is present", async () => {
-                invalidAbilityRemove = 2;
+                invalidAbilityRemove = 3;
 
                 await expect(
                     this.abilitiesContract.changeAbility(tokenId, invalidAbilityRemove, abilityAdd, level, architype, attributes)
@@ -267,6 +278,12 @@ describe("Abilities", () => {
                 await expect(
                     this.abilitiesContract.addAbility(tokenId, extraAbility, level, architype, attributes)
                 ).to.be.revertedWith("All ability slots have been assigned");
+            });
+
+            it("Ensures ability is not already owned", async () => {
+                await expect(
+                    this.abilitiesContract.addAbility(tokenId, existingAbility, level, architype, attributes)
+                ).to.be.revertedWith("Ability already owned");
             });
 
             it("Changes attribute correctly", async () => {

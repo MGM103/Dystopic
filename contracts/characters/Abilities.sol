@@ -70,17 +70,27 @@ contract Abilities is AbilitiesManifest {
         );
 
         uint256 i;
-        bool toChangePresent = false;
+        bool abilityPresent = false;
         uint256[MAX_ABILITIES] memory abilities = idToAbilities[tokenId];
 
         for(i = 0; i < MAX_ABILITIES; i++){
+            if(abilities[i] == abilityToAdd){
+                abilityPresent = true;
+            }
+        }
+
+        require(abilityPresent == false, "Ability already owned");
+
+        abilityPresent = false;
+
+        for(i = 0; i < MAX_ABILITIES; i++){
             if(abilities[i] == abilityToChange){
-                toChangePresent = true;
+                abilityPresent = true;
                 abilities[i] = abilityToAdd;
             }
         }
 
-        require(toChangePresent == true, "Ability to change is not present");
+        require(abilityPresent == true, "Ability to change is not present");
 
         idToAbilities[tokenId] = abilities;
         emit abilityChanged(msg.sender, tokenId, abilities, abilityToAdd, abilityToChange);
@@ -120,8 +130,8 @@ contract Abilities is AbilitiesManifest {
             }
         }
 
-        require(abilitySlotFree == true, "All ability slots have been assigned");
         require(abilityExists == false, "Ability already owned");
+        require(abilitySlotFree == true, "All ability slots have been assigned");
 
         idToAbilities[tokenId] = abilities;
         emit abilityAdded(msg.sender, tokenId, abilities, abilityToAdd);
