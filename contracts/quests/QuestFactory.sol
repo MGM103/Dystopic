@@ -8,7 +8,7 @@
 pragma solidity ^0.8.9;
 
 import "./EnemyManifest.sol";
-import "../libraries/Structs.sol";
+import "../utilities/Structs.sol";
 import "../characters/IDystopic.sol";
 import "../items/IWeapons.sol";
 

@@ -7,7 +7,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "../libraries/Structs.sol";
+import "../utilities/Structs.sol";
 
 interface IWeapons {
     function ownerToTokenIds(uint256) external view returns(uint256[] memory);

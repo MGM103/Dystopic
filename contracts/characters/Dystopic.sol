@@ -13,14 +13,17 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
-import "../libraries/Structs.sol";
+import "../utilities/Structs.sol";
+import "../utilities/Constants.sol";
 
 //Interfaces
 import "./IAttributes.sol";
+import "./IAbilities.sol";
 
 contract Dystopic is ERC721Enumerable, AccessControl {
     //Interfaces
     IAttributes Attributes;
+    IAbilities Abilities;
     
     //Token ID
     using Counters for Counters.Counter;
@@ -109,10 +112,6 @@ contract Dystopic is ERC721Enumerable, AccessControl {
         
         xp[_tokenID] += _amountXp;
         emit gainedXp(msg.sender, _tokenID, _amountXp);
-    }
-
-    function setAttributesInterface(address _addressInterface) external {
-        Attributes = IAttributes(_addressInterface);
     }
 
     function getAttributes(uint256 _tokenID) public view returns(uint256,uint256,uint256,uint256,uint256,uint256, uint256) {
@@ -230,6 +229,35 @@ contract Dystopic is ERC721Enumerable, AccessControl {
         return attributesURI;
     }
 
+    function tokenURIAbilities(uint256 _tokenId) internal returns(string memory){
+        uint256 i;
+        string[2] memory abilitiesStr;
+        string memory uriAbilities;
+        uint256[2] memory abilities = Abilities.idToAbilities(_tokenId);
+
+        for(i = 0; i < abilities.length; i++){
+            if(abilities[i] != 0){
+                abilitiesStr[i] = string(abi.encodePacked(
+                    ' { "trait_type": "Ability", "value": "', 
+                    Abilities.abilityToStr(abilities[i]),
+                    '"}'
+                ));
+            }else {
+                break;
+            }
+        }
+
+        for(i = 0; i < abilitiesStr.length; i++){
+            if(i == 0){
+                uriAbilities = string(abi.encodePacked(abilitiesStr[i]));
+            }else {
+                uriAbilities = string(abi.encodePacked(uriAbilities, ", ", abilitiesStr[i]));
+            }
+        }
+
+        return uriAbilities;
+    }
+
     function tokenURI(uint256 _tokenId) public view override returns(string memory) {
         string memory baseURI = tokenURIBase(_tokenId);
         string memory attributesURI = tokenURIAttributes(_tokenId);
@@ -252,6 +280,14 @@ contract Dystopic is ERC721Enumerable, AccessControl {
         );
 
         return output;
+    }
+
+    function setAttributesInterface(address addressInterface) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        Attributes = IAttributes(addressInterface);
+    }
+
+    function setAbilityInterface(address abilityInterface) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        Abilities = IAbilities(abilityInterface);
     }
 
     function supportsInterface(bytes4 interfaceId) public view override(ERC721Enumerable, AccessControl) returns(bool) {

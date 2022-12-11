@@ -7,7 +7,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "../libraries/Structs.sol";
+import "../utilities/Structs.sol";
 
 contract EnemyManifest {
     uint256 public constant totalEnemyVariants = 2;

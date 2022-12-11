@@ -1,6 +1,11 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
+async function deploy(name, ...params) {
+  const newContract = await ethers.getContractFactory(name);
+  return await newContract.deploy(...params).then(c => c.deployed());
+}
+
 describe("Dystopic", () => {
   let dystopicContract;
   let owner, addr1;
@@ -211,6 +216,18 @@ describe("Dystopic", () => {
 
       txn = await dystopicContract.tokenURI(tokenID);
       console.log(txn);
+    });
+  });
+
+  describe("Abilities Interface", async () => {
+    beforeEach(async () => {
+      const abilitiesContract = await deploy("Abilities");
+      const attributesFactory = await deploy("Attributes", dystopicContract.address);
+
+      await dystopicContract.setAttributesInterface(attributesContract.address);
+
+      mintTxn = await dystopicContract.createCharacter(charType);
+      await mintTxn.wait();
     });
   });
 

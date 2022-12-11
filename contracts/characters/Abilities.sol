@@ -8,10 +8,9 @@
 pragma solidity ^0.8.9;
 
 import "./AbilitiesManifest.sol";
-import "../libraries/Structs.sol";
+import "../utilities/Structs.sol";
 import "./IDystopic.sol";
 import "./IAttributes.sol";
-// import "../../node_modules/hardhat/console.sol";
 
 contract Abilities is AbilitiesManifest {
     uint256 public constant MAX_ABILITIES = 2;

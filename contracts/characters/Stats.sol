@@ -10,7 +10,7 @@ pragma solidity ^0.8.9;
 
 import "./IDystopic.sol";
 import "./IAttributes.sol";
-import "../libraries/Structs.sol";
+import "../utilities/Structs.sol";
 
 contract Stats {
     //interfaces

@@ -7,7 +7,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "../libraries/Structs.sol";
+import "../utilities/Structs.sol";
 
 contract AbilitiesManifest {
     uint256 public constant totalAbilities = 4;
@@ -37,6 +37,20 @@ contract AbilitiesManifest {
             return rageReqs();
         }else{
             return precisionReqs();
+        }
+    }
+
+    function abilityToStr(uint256 abilityId) public pure returns(string memory) {
+        require(abilityId >= 1 && abilityId <= totalAbilities, "Ability not found");
+
+        if(abilityId == 1) {
+            return "Armour Up";
+        }else if(abilityId == 2) {
+            return "Camo";
+        }else if(abilityId == 3) {
+            return "Rage";
+        }else{
+            return "Precision";
         }
     }
 

@@ -214,4 +214,18 @@ describe("Attributes", () => {
             expect(armourUpReqs[attrIndex][attributeKeys[i]]).to.equal(expectedAttrReqs[attributeKeys[i]]);
         }
     });
+
+    it("Returns the correct string for the ability", async () => {
+        const abilityStrs = [
+            "Armour Up",
+            "Camo",
+            "Rage",
+            "Precision"
+        ];
+
+        for(i = 1; i <= abilityStrs.length; i++){
+            let ability = await this.abilitiesManifest.abilityToStr(i);
+            expect(ability).to.equal(abilityStrs[i-1]);
+        }
+    });
 })

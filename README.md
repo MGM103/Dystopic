@@ -11,3 +11,8 @@ GAS_REPORT=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.js
 ```
+
+### To-Do
+- make num abilities a variable in library contract
+- rename library contract
+- fix formatting dystopic contract

@@ -14,7 +14,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
-import "../libraries/Structs.sol";
+import "../utilities/Structs.sol";
 import "./WeaponManifest.sol";
 
 contract Weapons is ERC721, ERC721Enumerable, ERC721Burnable, AccessControl, WeaponManifest {

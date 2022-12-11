@@ -8,7 +8,7 @@
 pragma solidity ^0.8.9;
 
 import "./IDystopic.sol";
-import "../libraries/Structs.sol";
+import "../utilities/Structs.sol";
 
 contract Attributes {
     //interface to the base contract
