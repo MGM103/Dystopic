@@ -20,7 +20,7 @@ import "../utilities/Constants.sol";
 import "./IAttributes.sol";
 import "./IAbilities.sol";
 
-contract Dystopic is ERC721Enumerable, AccessControl {
+contract Dystopic is ERC721Enumerable, AccessControl, Constants {
     //Interfaces
     IAttributes Attributes;
     IAbilities Abilities;

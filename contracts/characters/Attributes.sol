@@ -9,13 +9,11 @@ pragma solidity ^0.8.9;
 
 import "./IDystopic.sol";
 import "../utilities/Structs.sol";
+import "../utilities/Constants.sol";
 
-contract Attributes {
+contract Attributes is Constants {
     //interface to the base contract
     IDystopic immutable dyst; 
-    
-    //The amount of attributes characters at level one can spend
-    uint256 constant initAttributePoints = 25;
 
     mapping(uint256 => dl.CharAttributes) public idToAttributes;
     mapping(uint256 => uint256) public idToAttributePointsSpent;
@@ -80,7 +78,7 @@ contract Attributes {
     function calcInitAttributes(uint256 _strength, uint256 _speed, uint256 _fortitude, uint256 _technical, uint256 _instinct, uint256 _dexterity, uint256 _luck) internal pure returns(bool){
         uint256 initSpendTotal = _strength + _speed + _fortitude + _technical + _instinct + _dexterity + _luck;
 
-        if(initSpendTotal == initAttributePoints){
+        if(initSpendTotal == INIT_ATTRIBUTE_POINTS){
             return true;
         }else{
             return false;
