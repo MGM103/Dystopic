@@ -11,22 +11,22 @@ import "./AbilitiesManifest.sol";
 import "../utilities/Structs.sol";
 import "./IDystopic.sol";
 import "./IAttributes.sol";
+import "../utilities/Constants.sol";
 
 contract Abilities is AbilitiesManifest {
-    uint256 public constant MAX_ABILITIES = 2;
-
-    mapping(uint256 => uint256[MAX_ABILITIES]) public idToAbilities;
+    
+    mapping(uint256 => uint256[NUM_ABILITIES]) public idToAbilities;
     mapping(uint256 => bool) public initAbilitiesSet;
 
-    event initialisedAbilities(address indexed owner, uint256 characterId, uint256[MAX_ABILITIES] abilities, uint256 abilityAdded);
-    event abilityChanged(address indexed owner, uint256 characterId, uint256[MAX_ABILITIES] abilities, uint256 abilityAdded, uint256 abilityDropped);
-    event abilityAdded(address indexed owner, uint256 characterId, uint256[MAX_ABILITIES] abilites, uint256 abilityAdded);
+    event initialisedAbilities(address indexed owner, uint256 characterId, uint256[NUM_ABILITIES] abilities, uint256 abilityAdded);
+    event abilityChanged(address indexed owner, uint256 characterId, uint256[NUM_ABILITIES] abilities, uint256 abilityAdded, uint256 abilityDropped);
+    event abilityAdded(address indexed owner, uint256 characterId, uint256[NUM_ABILITIES] abilites, uint256 abilityAdded);
 
     constructor() {}
 
     function setInitAbilities(uint256 tokenId, uint256 abilityId, uint256 level, uint256 architype, dl.CharAttributes memory attributes) external {
         require(initAbilitiesSet[tokenId] == false, "Initial ability has already been set");
-        require(abilityId >= 1 && abilityId <= totalAbilities, "Ability not found");
+        require(abilityId >= 1 && abilityId <= TOTAL_ABILITIES, "Ability not found");
 
         (uint256 lvlReq, dl.Architypes architypeReq, dl.CharAttributes memory attrReq) = abilityToRequirements(abilityId);
         require(level >= lvlReq, "Ability level requirement not met");
@@ -49,8 +49,8 @@ contract Abilities is AbilitiesManifest {
 
     function changeAbility(uint256 tokenId, uint256 abilityToChange, uint256 abilityToAdd, uint256 level, uint256 architype, dl.CharAttributes memory attributes) external {
         require(initAbilitiesSet[tokenId] == true, "Abilities must be initialised before they can be changed");
-        require(abilityToChange >= 1 && abilityToChange <= totalAbilities, "Ability being changed not found");
-        require(abilityToAdd >= 1 && abilityToAdd <= totalAbilities, "Ability being added not found");
+        require(abilityToChange >= 1 && abilityToChange <= TOTAL_ABILITIES, "Ability being changed not found");
+        require(abilityToAdd >= 1 && abilityToAdd <= TOTAL_ABILITIES, "Ability being added not found");
         require(abilityToAdd != abilityToChange, "Abilities are the same");  
 
         (uint256 lvlReq, dl.Architypes architypeReq, dl.CharAttributes memory attrReq) = abilityToRequirements(abilityToAdd);
@@ -70,9 +70,9 @@ contract Abilities is AbilitiesManifest {
 
         uint256 i;
         bool abilityPresent = false;
-        uint256[MAX_ABILITIES] memory abilities = idToAbilities[tokenId];
+        uint256[NUM_ABILITIES] memory abilities = idToAbilities[tokenId];
 
-        for(i = 0; i < MAX_ABILITIES; i++){
+        for(i = 0; i < NUM_ABILITIES; i++){
             if(abilities[i] == abilityToAdd){
                 abilityPresent = true;
             }
@@ -82,7 +82,7 @@ contract Abilities is AbilitiesManifest {
 
         abilityPresent = false;
 
-        for(i = 0; i < MAX_ABILITIES; i++){
+        for(i = 0; i < NUM_ABILITIES; i++){
             if(abilities[i] == abilityToChange){
                 abilityPresent = true;
                 abilities[i] = abilityToAdd;
@@ -97,7 +97,7 @@ contract Abilities is AbilitiesManifest {
 
     function addAbility(uint256 tokenId, uint256 abilityToAdd, uint256 level, uint256 architype, dl.CharAttributes memory attributes) external {
         require(initAbilitiesSet[tokenId] == true, "Abilities must be initialised before they can be changed");
-        require(abilityToAdd >= 1 && abilityToAdd <= totalAbilities, "Ability being added not found");
+        require(abilityToAdd >= 1 && abilityToAdd <= TOTAL_ABILITIES, "Ability being added not found");
 
         (uint256 lvlReq, dl.Architypes architypeReq, dl.CharAttributes memory attrReq) = abilityToRequirements(abilityToAdd);
 
@@ -117,9 +117,9 @@ contract Abilities is AbilitiesManifest {
         uint256 i;
         bool abilitySlotFree = false;
         bool abilityExists = false;
-        uint256[MAX_ABILITIES] memory abilities = idToAbilities[tokenId];
+        uint256[NUM_ABILITIES] memory abilities = idToAbilities[tokenId];
 
-        for(i = 0; i < MAX_ABILITIES; i++){
+        for(i = 0; i < NUM_ABILITIES; i++){
             if(abilities[i] == abilityToAdd){
                 abilityExists = true;
                 break;

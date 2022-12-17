@@ -8,12 +8,12 @@
 pragma solidity ^0.8.9;
 
 import "../utilities/Structs.sol";
+import "../utilities/Constants.sol";
 
-contract AbilitiesManifest {
-    uint256 public constant totalAbilities = 4;
+contract AbilitiesManifest is Constants {
 
     function abilityToModifiers(uint256 abilityId) public pure returns(dl.BattleStats memory, uint256 duration) {
-        require(abilityId >= 1 && abilityId <= totalAbilities, "Ability not found");
+        require(abilityId >= 1 && abilityId <= TOTAL_ABILITIES, "Ability not found");
 
         if(abilityId == 1) {
             return armourUp();
@@ -27,7 +27,7 @@ contract AbilitiesManifest {
     }
 
     function abilityToRequirements(uint256 abilityId) public pure returns(uint256, dl.Architypes, dl.CharAttributes memory){
-        require(abilityId >= 1 && abilityId <= totalAbilities, "Ability not found");
+        require(abilityId >= 1 && abilityId <= TOTAL_ABILITIES, "Ability not found");
 
         if(abilityId == 1) {
             return armourUpReqs();
@@ -41,7 +41,7 @@ contract AbilitiesManifest {
     }
 
     function abilityToStr(uint256 abilityId) public pure returns(string memory) {
-        require(abilityId >= 1 && abilityId <= totalAbilities, "Ability not found");
+        require(abilityId >= 1 && abilityId <= TOTAL_ABILITIES, "Ability not found");
 
         if(abilityId == 1) {
             return "Armour Up";

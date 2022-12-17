@@ -6,7 +6,7 @@ async function deploy(name, ...params) {
     return await newContract.deploy(...params).then(c => c.deployed());
 }
 
-describe("Attributes", () => {
+describe("Abilities Manifest", () => {
     beforeEach(async () => {
         this.abilitiesManifest = await deploy("AbilitiesManifest");
         this.accounts = await ethers.getSigners();
@@ -14,7 +14,7 @@ describe("Attributes", () => {
 
     it("Correctly outputs the total amount of abilities", async () => {
         const expectedTotal = 4;
-        const totalAbilities = await this.abilitiesManifest.totalAbilities();
+        const totalAbilities = await this.abilitiesManifest.TOTAL_ABILITIES();
 
         expect(totalAbilities).to.equal(expectedTotal);
     });

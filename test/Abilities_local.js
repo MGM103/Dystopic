@@ -14,7 +14,7 @@ describe("Abilities", () => {
 
     it("Has the correct number of abilities", async () => {
         const expectedNumAbilities = 2;
-        const numAbilities = await this.abilitiesContract.MAX_ABILITIES();
+        const numAbilities = await this.abilitiesContract.NUM_ABILITIES();
         
         expect(numAbilities).to.equal(expectedNumAbilities);
     });
