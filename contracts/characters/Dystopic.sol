@@ -50,7 +50,7 @@ contract Dystopic is ERC721Enumerable, AccessControl, Constants {
      *  Initialises the ERC721, stores images of all the avatars.
      *  @param _imageURIs {string[]} - An array of the imageURIs for all the avatar architypes.
      */
-    constructor(string[] memory _imageURIs) ERC721("Dystopik", "DYST"){
+    constructor(string[] memory _imageURIs) ERC721("Dystopic", "DYST"){
         //Set permissions
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(XP_GIVER, msg.sender);
@@ -229,16 +229,16 @@ contract Dystopic is ERC721Enumerable, AccessControl, Constants {
         return attributesURI;
     }
 
-    function tokenURIAbilities(uint256 _tokenId) internal returns(string memory){
+    function tokenURIAbilities(uint256 _tokenId) public view returns(string memory){
         uint256 i;
-        string[2] memory abilitiesStr;
-        string memory uriAbilities;
-        uint256[2] memory abilities = Abilities.idToAbilities(_tokenId);
+        string[NUM_ABILITIES] memory abilitiesStr;
+        string memory uriAbilities = "test";
+        uint256[NUM_ABILITIES] memory abilities = Abilities.getAbilities(_tokenId);
 
         for(i = 0; i < abilities.length; i++){
             if(abilities[i] != 0){
                 abilitiesStr[i] = string(abi.encodePacked(
-                    ' { "trait_type": "Ability", "value": "', 
+                    '{"trait_type":"Ability","value":"', 
                     Abilities.abilityToStr(abilities[i]),
                     '"}'
                 ));
@@ -286,7 +286,7 @@ contract Dystopic is ERC721Enumerable, AccessControl, Constants {
         Attributes = IAttributes(addressInterface);
     }
 
-    function setAbilityInterface(address abilityInterface) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setAbilitiesInterface(address abilityInterface) external onlyRole(DEFAULT_ADMIN_ROLE) {
         Abilities = IAbilities(abilityInterface);
     }
 

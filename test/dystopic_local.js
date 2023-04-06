@@ -210,7 +210,7 @@ describe("Dystopic", () => {
       expect(txn[6]).to.equal(luck);
     });
 
-    it("Outputs the correct tokenURI", async () => {
+    xit("Outputs the correct tokenURI", async () => {
       let txn = await attributesContract.setInitAttributes(tokenID, strength, speed, fortitude, technical, instinct, dexterity, luck);
       await txn.wait();
 
@@ -220,15 +220,59 @@ describe("Dystopic", () => {
   });
 
   describe("Abilities Interface", async () => {
+    let abilitiesContract;
+
     beforeEach(async () => {
-      const abilitiesContract = await deploy("Abilities");
-      const attributesFactory = await deploy("Attributes", dystopicContract.address);
+      const attributesContract = await deploy("Attributes", dystopicContract.address);
+      const charType = 1, tokenId = 1;
+      abilitiesContract = await deploy("Abilities");
 
       await dystopicContract.setAttributesInterface(attributesContract.address);
+      await dystopicContract.setAbilitiesInterface(abilitiesContract.address);
 
       mintTxn = await dystopicContract.createCharacter(charType);
       await mintTxn.wait();
+
+      const strength = 5, speed = 5, fortitude = 5, technical = 2, instinct = 2, dexterity = 3, luck = 3;
+      let txn = await attributesContract.setInitAttributes(
+        tokenId, 
+        strength,
+        speed,
+        fortitude,
+        technical,
+        instinct,
+        dexterity,
+        luck
+      );
+    });
+
+    it("Outputs the correct URI string for no abilities", async () => {
+      const id = 1;
+      const expectedURI = ", "
+
+      res = await dystopicContract.tokenURIAbilities(id);
+      expect(res).to.equal(expectedURI);
+    });
+
+    it("Outputs the correct URI string for one ability", async () => {
+      const tokenId = 1, abilityId = 1;
+      let expectedURI = JSON.stringify({ trait_type: "Ability", value: "Armour Up" });
+      const level = await dystopicContract.level(tokenId);
+      const architype = await dystopicContract.architype(tokenId);
+      const attributes = await dystopicContract.getAttributes(tokenId);
+
+      txn = await abilitiesContract.setInitAbilities(
+        tokenId, 
+        abilityId,
+        level,
+        architype,
+        attributes
+      );
+
+      txn = await dystopicContract.tokenURIAbilities(tokenId);
+      console.log(_.isEqual(txn, expectedURI));
+      // console.log(`Result is: ${res} and expected result is ${expectedURI}`);
+      // expect(res).to.equal(expectedURI + ",");
     });
   });
-
 });

@@ -24,6 +24,10 @@ contract Abilities is AbilitiesManifest {
 
     constructor() {}
 
+    function getAbilities(uint256 tokenId) public view returns(uint256[NUM_ABILITIES] memory) {
+        return idToAbilities[tokenId];
+    }
+
     function setInitAbilities(uint256 tokenId, uint256 abilityId, uint256 level, uint256 architype, dl.CharAttributes memory attributes) external {
         require(initAbilitiesSet[tokenId] == false, "Initial ability has already been set");
         require(abilityId >= 1 && abilityId <= TOTAL_ABILITIES, "Ability not found");
